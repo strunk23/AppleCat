@@ -14,6 +14,7 @@ import net.minecraft.world.entity.ai.goal.LookAtPlayerGoal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.CatVariant;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.DyeColor;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
@@ -22,10 +23,23 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Objects;
+import java.util.UUID;
 
 public class CatEntity extends Mob {
+
+    private static LivingEntity owner;
+    private static DyeColor collar;
+
     public CatEntity(EntityType<? extends Mob> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    public void setOwner(LivingEntity owner) {
+        CatEntity.owner = owner;
+    }
+
+    public void setCollar(DyeColor collar) {
+        CatEntity.collar = collar;
     }
 
     @Override
@@ -50,6 +64,12 @@ public class CatEntity extends Mob {
     @Override
     protected SoundEvent getDeathSound() {
         return SoundEvents.CAT_DEATH;
+    }
+
+    @Override
+    public void playAmbientSound() {
+        playSound(SoundEvents.CAT_PURR);
+        super.playAmbientSound();
     }
 
     @Override
@@ -79,10 +99,15 @@ public class CatEntity extends Mob {
     private static void spawnCat(Level level, double x, double y, double z) {
         EntityType<Cat> newCat = EntityType.CAT;
         Cat cat = newCat.create(level);
-        if (cat != null) {
-            cat.setVariant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.WHITE)));
-            cat.setPos(x, y, z);
-            level.addFreshEntity(cat);
+        assert cat != null;
+        System.out.println(owner.toString());
+        System.out.println(collar.toString());
+        if (owner != null && collar != null) {
+            cat.tame((Player) owner);
+            cat.setCollarColor(collar);
         }
+        cat.setVariant(Objects.requireNonNull(BuiltInRegistries.CAT_VARIANT.get(CatVariant.WHITE)));
+        cat.setPos(x, y, z);
+        level.addFreshEntity(cat);
     }
 }
