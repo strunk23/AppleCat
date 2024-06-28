@@ -14,6 +14,7 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
 public class CatEntity extends Mob {
 
     public CatEntity(EntityType<? extends Mob> pEntityType, Level pLevel) {
@@ -31,7 +32,6 @@ public class CatEntity extends Mob {
                 .add(Attributes.MAX_HEALTH, 10d)
                 .add(Attributes.FOLLOW_RANGE, 0d);
     }
-
     @Nullable
     @Override
     protected SoundEvent getHurtSound(@NotNull DamageSource pDamageSource) {
@@ -53,7 +53,6 @@ public class CatEntity extends Mob {
     @Override
     protected void dropCustomDeathLoot(@NotNull DamageSource pSource, int pLooting, boolean pRecentlyHit) {
         super.dropCustomDeathLoot(pSource, pLooting, pRecentlyHit);
-
         if (!this.level().isClientSide) {
             ItemStack stack = new ItemStack(Items.APPLE);
             this.spawnAtLocation(stack);

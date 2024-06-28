@@ -16,6 +16,7 @@ public class CatDataProvider implements ICapabilityProvider, INBTSerializable<Co
     public static Capability<CatData> CAT_DATA = CapabilityManager.get(new CapabilityToken<CatData>() {});
 
     private CatData owner = null;
+
     private final LazyOptional<CatData> optional = LazyOptional.of(this::createCatData);
 
     private CatData createCatData() {

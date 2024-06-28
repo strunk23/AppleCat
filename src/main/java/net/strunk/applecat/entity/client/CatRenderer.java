@@ -15,7 +15,7 @@ public class CatRenderer extends MobRenderer<CatEntity, AppleCat<CatEntity>> {
 
     @Override
     public @NotNull ResourceLocation getTextureLocation(@NotNull CatEntity pEntity) {
-        return new ResourceLocation(AppleCatMod.MOD_ID, "textures/entity/apple_cat.png");
+        return new ResourceLocation(AppleCatMod.MOD_ID, "textures/entity/collar_red.png");
     }
 
     @Override
