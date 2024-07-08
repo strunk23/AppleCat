@@ -1,7 +1,6 @@
 package net.strunk.applecat.event;
 
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -22,6 +21,7 @@ import net.strunk.applecat.data.CatDataProvider;
 import net.strunk.applecat.entity.RegisterEntity;
 import net.strunk.applecat.entity.custom.CatEntity;
 
+import java.awt.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -37,7 +37,8 @@ public class RegisterCatEvents {
         if (entity instanceof Cat cat && item.getItem().toString().equals("apple") && ((Cat) entity).getVariant().equals(BuiltInRegistries.CAT_VARIANT.get(CatVariant.WHITE)) && cat.getOwner() != null) {
             UUID owner = cat.getOwnerUUID();
             DyeColor collar = cat.getCollarColor();
-            spawnCustomCat(level, entity, entity.getX(), entity.getY(), entity.getZ(), owner, collar);
+            net.minecraft.network.chat.Component tag = cat.getCustomName();
+            spawnCustomCat(level, entity, entity.getX(), entity.getY(), entity.getZ(), owner, collar, tag);
             item.shrink(1);
         }
         if (entity instanceof CatEntity) {
@@ -46,16 +47,17 @@ public class RegisterCatEvents {
         }
     }
 
-    private static void spawnCustomCat(Level level, Entity entity, double x, double y, double z, UUID owner, DyeColor collar) {
+    private static void spawnCustomCat(Level level, Entity entity, double x, double y, double z, UUID owner, DyeColor collar, net.minecraft.network.chat.Component tag) {
         entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
-        // texture variant should be chosen here and passed to CatEntity
         EntityType<CatEntity> newCat = RegisterEntity.APPLE_CAT.get();
         CatEntity cat = newCat.create(level);
         assert cat != null;
         cat.getCapability(CatDataProvider.CAT_DATA).ifPresent(data -> {
             data.setOwner(owner);
             data.setCollar(collar);
+            data.setTag(tag);
         });
+        cat.setCustomName(tag);
         cat.setPos(x, y, z);
         level.addFreshEntity(cat);
     }
@@ -71,6 +73,7 @@ public class RegisterCatEvents {
             if (data.getOwner() != null) {
                 cat.tame(Objects.requireNonNull(level.getPlayerByUUID(data.getOwner())));
                 cat.setCollarColor(data.getCollar());
+                cat.setCustomName(data.getTag());
             }
         });
         cat.setPos(x, y, z);
