@@ -12,6 +12,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.common.util.LazyOptional;
+import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -37,7 +38,10 @@ public class RegisterCatEvents {
             UUID owner = cat.getOwnerUUID();
             DyeColor collar = cat.getCollarColor();
             net.minecraft.network.chat.Component tag = cat.getCustomName();
-            spawnCustomCat(level, entity, entity.getX(), entity.getY(), entity.getZ(), owner, collar, tag);
+            float health = cat.getHealth();
+            System.out.println(health);
+            System.out.println(cat.getMaxHealth());
+            spawnCustomCat(level, entity, entity.getX(), entity.getY(), entity.getZ(), owner, collar, tag, health);
             stack.shrink(1);
         }
         if (entity instanceof CatEntity) {
@@ -52,7 +56,19 @@ public class RegisterCatEvents {
         }
     }
 
-    private static void spawnCustomCat(Level level, Entity entity, double x, double y, double z, UUID owner, DyeColor collar, net.minecraft.network.chat.Component tag) {
+    @SubscribeEvent
+    public static void onPlayerHurtCat(LivingHurtEvent event) {
+        Entity entity = event.getEntity();
+        float hurt = event.getAmount();
+
+        if (entity instanceof CatEntity) {
+            entity.getCapability(CatDataProvider.CAT_DATA).ifPresent(data -> {
+                data.setHealth(data.getHealth()-hurt);
+            });
+        }
+    }
+
+    private static void spawnCustomCat(Level level, Entity entity, double x, double y, double z, UUID owner, DyeColor collar, net.minecraft.network.chat.Component tag, float health) {
         entity.remove(Entity.RemovalReason.CHANGED_DIMENSION);
         EntityType<CatEntity> newCat = RegisterEntity.APPLE_CAT.get();
         CatEntity cat = newCat.create(level);
@@ -61,7 +77,9 @@ public class RegisterCatEvents {
             data.setOwner(owner);
             data.setCollar(collar);
             data.setTag(tag);
+            data.setHealth(health);
         });
+        cat.setHealth(health);
         cat.setCustomName(tag);
         cat.setPos(x, y, z);
         level.addFreshEntity(cat);
@@ -83,6 +101,7 @@ public class RegisterCatEvents {
                 } else {
                     cat.setCustomName(data.getTag());
                 }
+                cat.setHealth(data.getHealth());
             }
         });
         cat.setPos(x, y, z);

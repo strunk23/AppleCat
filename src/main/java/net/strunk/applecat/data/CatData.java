@@ -16,6 +16,8 @@ public class CatData {
 
     private net.minecraft.network.chat.Component tag;
 
+    private float health;
+
     public void setOwner(UUID owner) {
         this.owner = owner;
     }
@@ -32,6 +34,14 @@ public class CatData {
         return collar;
     }
 
+    public float getHealth() {
+        return health;
+    }
+
+    public void setHealth(float health) {
+        this.health = health;
+    }
+
     public net.minecraft.network.chat.Component getTag() {
         return tag;
     }
@@ -46,6 +56,7 @@ public class CatData {
         if (tag != null) {
             nbt.put("Tag", (Tag) tag);
         }
+        nbt.putFloat("Health", health);
     }
 
     public void loadNBTData(CompoundTag nbt) {
@@ -54,5 +65,6 @@ public class CatData {
         if (nbt.get("Tag") != null) {
             tag = (Component) nbt.get("Tag");
         }
+        health = nbt.getFloat("Health");
     }
 }
