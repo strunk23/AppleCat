@@ -21,7 +21,6 @@ import net.strunk.applecat.data.CatDataProvider;
 import net.strunk.applecat.entity.RegisterEntity;
 import net.strunk.applecat.entity.custom.CatEntity;
 
-import java.awt.*;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -32,18 +31,24 @@ public class RegisterCatEvents {
         Entity entity = event.getTarget();
         Player player = event.getEntity();
         Level level = event.getLevel();
-        ItemStack item = event.getItemStack();
+        ItemStack stack = event.getItemStack();
 
-        if (entity instanceof Cat cat && item.getItem().toString().equals("apple") && ((Cat) entity).getVariant().equals(BuiltInRegistries.CAT_VARIANT.get(CatVariant.WHITE)) && cat.getOwner() != null) {
+        if (entity instanceof Cat cat && stack.getItem().toString().equals("apple") && ((Cat) entity).getVariant().equals(BuiltInRegistries.CAT_VARIANT.get(CatVariant.WHITE)) && cat.getOwner() != null) {
             UUID owner = cat.getOwnerUUID();
             DyeColor collar = cat.getCollarColor();
             net.minecraft.network.chat.Component tag = cat.getCustomName();
             spawnCustomCat(level, entity, entity.getX(), entity.getY(), entity.getZ(), owner, collar, tag);
-            item.shrink(1);
+            stack.shrink(1);
         }
         if (entity instanceof CatEntity) {
-            spawnCat(level, entity, entity.getX(), entity.getY(), entity.getZ());
-            player.setItemInHand(InteractionHand.MAIN_HAND, new ItemStack(Items.APPLE));
+            if (stack.getItem().equals(Items.AIR)) {
+                stack = new ItemStack(Items.APPLE);
+                player.setItemInHand(InteractionHand.MAIN_HAND, stack);
+                spawnCat(level, entity, entity.getX(), entity.getY(), entity.getZ());
+            } else if (stack.getItem().equals(Items.APPLE) && stack.getCount() <= 63) {
+                stack.shrink(-1);
+                spawnCat(level, entity, entity.getX(), entity.getY(), entity.getZ());
+            }
         }
     }
 
@@ -73,7 +78,11 @@ public class RegisterCatEvents {
             if (data.getOwner() != null) {
                 cat.tame(Objects.requireNonNull(level.getPlayerByUUID(data.getOwner())));
                 cat.setCollarColor(data.getCollar());
-                cat.setCustomName(data.getTag());
+                if (entity.getCustomName() != null) {
+                    cat.setCustomName(entity.getCustomName());
+                } else {
+                    cat.setCustomName(data.getTag());
+                }
             }
         });
         cat.setPos(x, y, z);
