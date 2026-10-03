@@ -1,6 +1,5 @@
 package net.strunk.applecat.event;
 
-import net.minecraft.client.renderer.entity.EntityRenderDispatcher;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
