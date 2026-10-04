@@ -2,7 +2,7 @@ package net.strunk.applecat.entity.client;
 
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
-import net.minecraft.client.model.HierarchicalModel;
+import net.minecraft.client.model.EntityModel;
 import net.minecraft.client.model.geom.ModelLayerLocation;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.PartPose;
@@ -11,7 +11,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.strunk.applecat.AppleCat;
 import net.strunk.applecat.entity.custom.AppleCatEntity;
 
-public class AppleCatModel<T extends AppleCatEntity> extends HierarchicalModel<T> {
+public class AppleCatModel<T extends AppleCatEntity> extends EntityModel<T> {
     public static final ModelLayerLocation LAYER_LOCATION = new ModelLayerLocation(ResourceLocation.fromNamespaceAndPath(AppleCat.MOD_ID, "applecat"), "main");
     private final ModelPart body;
     private final ModelPart head;
@@ -86,10 +86,5 @@ public class AppleCatModel<T extends AppleCatEntity> extends HierarchicalModel<T
     public void renderToBuffer(PoseStack poseStack, VertexConsumer vertexConsumer, int packedLight, int packedOverlay, int color) {
         body.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
         bone.render(poseStack, vertexConsumer, packedLight, packedOverlay, color);
-    }
-
-    @Override
-    public ModelPart root() {
-        return body;
     }
 }

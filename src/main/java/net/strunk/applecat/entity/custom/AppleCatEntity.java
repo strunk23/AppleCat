@@ -6,8 +6,6 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class AppleCatEntity extends Animal {
     public AppleCatEntity(EntityType<? extends Animal> entityType, Level level) {
@@ -15,12 +13,12 @@ public class AppleCatEntity extends Animal {
     }
 
     @Override
-    public boolean isFood(@NotNull ItemStack itemStack) {
+    public boolean isFood(ItemStack itemStack) {
         return false;
     }
 
     @Override
-    public @Nullable AgeableMob getBreedOffspring(@NotNull ServerLevel serverLevel, @NotNull AgeableMob ageableMob) {
+    public AgeableMob getBreedOffspring(ServerLevel serverLevel, AgeableMob ageableMob) {
         return null;
     }
 }

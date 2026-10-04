@@ -10,7 +10,7 @@ import net.strunk.applecat.entity.custom.AppleCatEntity;
 
 import java.util.function.Supplier;
 
-public class ModEntities {
+public class AppleCatEntities {
     public static final DeferredRegister<EntityType<?>> ENTITY_TYPES =
             DeferredRegister.create(BuiltInRegistries.ENTITY_TYPE, AppleCat.MOD_ID);
 

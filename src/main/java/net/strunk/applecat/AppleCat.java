@@ -1,6 +1,7 @@
 package net.strunk.applecat;
 
-import net.strunk.applecat.entity.ModEntities;
+import net.strunk.applecat.attachment.AppleCatAttachments;
+import net.strunk.applecat.entity.AppleCatEntities;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -25,7 +26,8 @@ public class AppleCat {
 
         NeoForge.EVENT_BUS.register(this);
 
-        ModEntities.register(modEventBus);
+        AppleCatEntities.register(modEventBus);
+        AppleCatAttachments.register(modEventBus);
 
         modEventBus.addListener(this::addCreative);
 

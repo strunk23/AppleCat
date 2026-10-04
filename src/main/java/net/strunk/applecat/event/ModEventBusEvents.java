@@ -5,7 +5,7 @@ import net.neoforged.fml.common.EventBusSubscriber;
 import net.neoforged.neoforge.client.event.EntityRenderersEvent;
 import net.neoforged.neoforge.event.entity.EntityAttributeCreationEvent;
 import net.strunk.applecat.AppleCat;
-import net.strunk.applecat.entity.ModEntities;
+import net.strunk.applecat.entity.AppleCatEntities;
 import net.strunk.applecat.entity.client.AppleCatModel;
 import net.strunk.applecat.entity.custom.AppleCatEntity;
 
@@ -18,6 +18,6 @@ public class ModEventBusEvents {
 
     @SubscribeEvent
     public static void registerAttributes(EntityAttributeCreationEvent event) {
-        event.put(ModEntities.APPLE_CAT.get(), AppleCatEntity.createMobAttributes().build());
+        event.put(AppleCatEntities.APPLE_CAT.get(), AppleCatEntity.createMobAttributes().build());
     }
 }
