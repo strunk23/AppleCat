@@ -2,6 +2,7 @@ package net.strunk.applecat;
 
 import net.strunk.applecat.attachment.AppleCatAttachments;
 import net.strunk.applecat.entity.AppleCatEntities;
+import net.strunk.applecat.entity.client.AppleCatRenderHandler;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;

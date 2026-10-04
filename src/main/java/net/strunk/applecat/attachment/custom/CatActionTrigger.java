@@ -12,22 +12,15 @@ import net.strunk.applecat.attachment.AppleCatAttachments;
 public class CatActionTrigger {
 
     @SubscribeEvent
-    public static void onCatClick(PlayerInteractEvent.EntityInteract event) {
-        if (event.getLevel().isClientSide()) {
-            return;
-        }
+    public static void onCatRightClick(PlayerInteractEvent.EntityInteract event) {
+        if (event.getLevel().isClientSide()) { return; }
+        if (!(event.getTarget() instanceof Cat cat)) { return; }
+        if (!event.getItemStack().is(Items.APPLE)) { return; }
 
-        if (!(event.getTarget() instanceof Cat cat)) {
-            return;
-        }
+        CatActionAttachment action = cat.getData(AppleCatAttachments.CAT_ACTION);
 
-        if (!event.getItemStack().is(Items.APPLE)) {
-            return;
-        }
+        action.setActive(!action.isActive());
 
-        CatActionAttachment action =
-                cat.getData(AppleCatAttachments.CAT_ACTION);
-
-        action.print();
+        cat.setData(AppleCatAttachments.CAT_ACTION, action);
     }
 }

@@ -10,13 +10,18 @@ import net.strunk.applecat.attachment.custom.CatActionAttachment;
 import java.util.function.Supplier;
 
 public class AppleCatAttachments {
-    public static final DeferredRegister<AttachmentType<?>> ATTACHMENT_TYPES =
+
+    public static final DeferredRegister<AttachmentType<?>> ATTACHMENTS =
             DeferredRegister.create(NeoForgeRegistries.ATTACHMENT_TYPES, AppleCat.MOD_ID);
 
     public static final Supplier<AttachmentType<CatActionAttachment>> CAT_ACTION =
-            ATTACHMENT_TYPES.register("cat_action", () -> AttachmentType.builder(CatActionAttachment::new).build());
+            ATTACHMENTS.register("cat_action",
+                    () -> AttachmentType.builder(CatActionAttachment::new)
+                            .sync(CatActionAttachment.STREAM_CODEC)
+                            .build()
+            );
 
-    public static void register(IEventBus modBus) {
-        ATTACHMENT_TYPES.register(modBus);
+    public static void register(IEventBus eventBus) {
+        ATTACHMENTS.register(eventBus);
     }
 }

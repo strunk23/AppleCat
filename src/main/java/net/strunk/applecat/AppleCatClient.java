@@ -9,7 +9,9 @@ import net.neoforged.fml.common.Mod;
 import net.neoforged.fml.event.lifecycle.FMLClientSetupEvent;
 import net.neoforged.neoforge.client.gui.ConfigurationScreen;
 import net.neoforged.neoforge.client.gui.IConfigScreenFactory;
+import net.neoforged.neoforge.common.NeoForge;
 import net.strunk.applecat.entity.AppleCatEntities;
+import net.strunk.applecat.entity.client.AppleCatRenderHandler;
 import net.strunk.applecat.entity.client.AppleCatRenderer;
 
 @Mod(value = AppleCat.MOD_ID, dist = Dist.CLIENT)
@@ -17,6 +19,7 @@ import net.strunk.applecat.entity.client.AppleCatRenderer;
 public class AppleCatClient {
     public AppleCatClient(ModContainer container) {
         container.registerExtensionPoint(IConfigScreenFactory.class, ConfigurationScreen::new);
+        NeoForge.EVENT_BUS.register(AppleCatRenderHandler.class);
     }
 
     @SubscribeEvent
